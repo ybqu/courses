@@ -138,7 +138,6 @@ dmypy.json
 cython_debug/
 
 *.synctex.gz
-ppt模板*
 屈原斌-周报*.tex
 周报模板.tex
 组会模板.pptx
