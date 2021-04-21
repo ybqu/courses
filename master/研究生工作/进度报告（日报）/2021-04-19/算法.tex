@@ -1,0 +1,40 @@
+% \documentclass{article}
+\documentclass[UTF8]{ctexart}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{CJK}
+\renewcommand{\algorithmicrequire}{ \textbf{Input:}} %Use Input in the format of Algorithm
+\renewcommand{\algorithmicensure}{ \textbf{Output:}} %UseOutput in the format of Algorithm
+\begin{document}
+\begin{algorithm}[h]
+    \caption{离题检测聚类方案算法}
+    \label{}
+    \begin{algorithmic}[1]
+      \REQUIRE ~~\\ %算法的输入参数：Input
+        Number of topics $N$\\
+        Model $M$ obtain context vector
+      \ENSURE ~~\\ %算法的输出：Output
+        $Recall@10$ for each prompts \\ 
+        $R$ for all prompts \\
+        \FOR{each $i \in [1,N]$}
+            \STATE Get the context vector $C_j(j=0,1,...,N)$ of all compositions under the prompt $P_i$ by model $M$;\
+            \STATE Use AgglomerativeClustering algorithm to cluster $C_j$, get M clusters $R_k(k=0,1,...,M)$\
+            \FOR{each $k \in R_k$}
+              \IF{$Num(k)$ \textgreater 5}
+                \STATE $Samples$.append(k)\   % 大概率不离题
+              \ELSE
+                \STATE $MaybeOT$.append(k)\   % 大概率离题（孤立点）
+              \ENDIF
+            \ENDFOR
+            \FOR{each $ot \in MaybeOT$}
+              \STATE Calculate the distance between $ot$ and $Samples$ separately, get $D_j(j=0,1,...,len(Samples))$\
+              \STATE $D = min(D_j)$   % 当前孤立点的最小距离
+            \ENDFOR
+            \STATE Sort all $D$, calculate $Recall@10$, get the $Recall_i$ of $P_i$\
+        \ENDFOR
+
+        \STATE Take the average of all $Recall_i$ to get $R$\
+        \STATE $R=\frac{\sum_{i=0}^{10} Recall_i}{10}$\
+    \end{algorithmic}
+\end{algorithm}
+\end{document}
